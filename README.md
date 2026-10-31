@@ -38,11 +38,104 @@ Move-Item $env:LOCALAPPDATA\nvim-data $env:LOCALAPPDATA\nvim-data.bak
 ### Installation for Linux & MacOS
 
 ```bash
-git clone https://github.com/XyrelTenz/nvim.git ~/.config/nvim
+git clone git@github.com:enesuzun2002/nvim.git ~/.config/nvim
 ```
 
 ### Installation for Windows
 
 ```bash
-git clone https://github.com/XyrelTenz/nvim.git $env:LOCALAPPDATA\nvim
+git clone git@github.com:enesuzun2002/nvim.git $env:LOCALAPPDATA\nvim
 ```
+
+## Keybindings
+
+Leader key is `<Space>`. Custom mappings below (`require("nvchad.mappings")` in `lua/mappings.lua` provides the NvChad defaults on top).
+
+  > What's *not* here: no DAP debugger keymaps are bound (`debugger = { enabled = false, run_via_dap = false }` in flutter-tools), and most `<leader>r*` / `<leader>c*` / `<leader>k*` keys only do something when the matching SDK or tool is installed and you're in a project of that type.
+
+### General & Editing
+
+| Key | Modes | Description |
+| --- | --- | --- |
+| `;` | normal | Enter command mode (instead of `:`) |
+| `jk` | insert | Exit insert mode |
+| `gd` | normal | Go to definition (LSP) |
+| `<A-a>` | normal | LSP code action |
+| `<A-j>` / `<A-k>` | normal, insert, visual | Move line(s) down / up (with re-indent) |
+| `<leader>tt` | normal | Toggle background transparency |
+| `<A-i>` | normal, terminal | Toggle floating terminal (0.5×0.5 centered) |
+
+### Files, Projects & Git
+
+| Key | Description |
+| --- | --- |
+| `<leader>fr` | Recent files (Telescope, hidden files included) |
+| `<leader>fp` | Find projects (project.nvim, detection via `.git` / `melos.yaml`) |
+| `<leader>fc` | Find files inside the Neovim config |
+| `<leader>gg` | Lazygit |
+| `<C-b>c` / `<C-b>n` / `<C-b>p` / `<C-b>x` / `<C-b>&` | Tmux-style tabs: new / next / previous / close / close |
+| `nvim-tree` | `l` / `<CR>` open, `h` go up a directory (node_modules, build, dist, etc. are hidden) |
+
+### Flutter / Dart (dart files; SDK resolved from `~/Projects/flutter/sdk/flutter`, falls back to `$PATH`)
+
+| Key | Description |
+| --- | --- |
+| `<leader>rr` | Flutter Run |
+| `<leader>rd` | Flutter Debug |
+| `<leader>re` | Flutter Emulators |
+| `<leader>rv` | Flutter Devices |
+| `<leader>rl` | Hot Reload |
+| `<leader>rR` | Hot Restart |
+| `<leader>rq` | Quit Flutter |
+| `<leader>ro` | Toggle Flutter outline |
+| `<leader>rL` / `<leader>rc` | Toggle / clear dev log |
+| `<leader>ra` | Attach to running app |
+| `<leader>rt` | Flutter DevTools |
+
+  > Emulators launch with `--enable-gpu-libvulkan --gpu host` and `QT_QPA_PLATFORM=xcb`.
+
+### Go (go.nvim)
+
+| Key | Description |
+| --- | --- |
+| `<leader>gtr` | Run test for current function |
+| `<leader>gtf` | Run all tests in file |
+| `<leader>gtp` | Run all tests in package |
+| `<leader>gtc` | Toggle test coverage signs |
+| `<leader>gr` | Go Run Project |
+| `<leader>gs` | Go Stop Project |
+
+### Rust (via cargo, in floating terminal)
+
+| Key | Description |
+| --- | --- |
+| `<leader>cr` | `cargo run` |
+| `<leader>ct` | `cargo test` |
+| `<leader>cc` | `cargo check` |
+
+### Gradle / Spring Boot & Amper
+
+| Key | Description |
+| --- | --- |
+| `<leader>gr` | Run Gradle project (`./gradlew run`, or `bootRun` if Spring Boot is detected via `gradlew`) |
+| `<leader>kb` / `<leader>ar` / `<leader>at` | Amper: build / run app / test |
+| `<leader>ks` / `<leader>km` / `<leader>kd` | Amper: show settings / modules / dependencies |
+| `<leader>kc` | Amper: clean build |
+
+### Other Commands
+
+- `Trouble` — diagnostics list (hints filtered out)
+- `Lazy` — plugin manager
+- `FlutterRun`, `FlutterDebug`, `FlutterEmulators`, `FlutterDevices`, `FlutterReload`, `FlutterRestart`, `FlutterQuit`, `FlutterOutlineToggle`, `FlutterLogToggle`, `FlutterLogClear`, `FlutterAttach`, `FlutterDevTools` — flutter-tools user commands used by the mappings above
+
+## Language support
+
+LSP servers enabled in `lua/configs/lspconfig.lua`: html, cssls, nixd, ts_ts (with `@vue/typescript-plugin`), oxlint, tailwindcss, lua_ls, gopls, sqls, vue_ls, rust_analyzer (clippy on save), clangd — plus jdtls (Java 21 via `nvim-java`) and the Dart language server (flutter-tools).
+
+Formatting on save (`conform.nvim`, falls back to LSP formatting): stylua (Lua), oxfmt (web/json), gofmt (Go), rustfmt (Rust), sqlfmt (SQL), tombi (TOML), clang-format (C++), alejandra (Nix), google-java-format (Java). Dart buffers are formatted by the LSP + 2-space indent.
+
+### Language-specific notes
+
+- **Nix (`nixd`)**: expects a flake with `nixosConfigurations.XyrelTenz` for NixOS/home-manager option completion
+- **Java**: expects JDK 21 at `/usr/lib/jvm/default`, no auto install
+- **Vue**: expects `@vue/typescript-plugin` in `/usr/lib/node_modules` and `vue-language-server` in `/usr/bin`
