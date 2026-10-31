@@ -130,6 +130,7 @@ map("n", "<leader>rL", "<cmd>FlutterLogToggle<cr>", { desc = "Flutter Log" })
 map("n", "<leader>rc", "<cmd>FlutterLogClear<cr>", { desc = "Clear Flutter Log" })
 map("n", "<leader>ra", "<cmd>FlutterAttach<cr>", { desc = "Attach to App" })
 map("n", "<leader>rt", "<cmd>FlutterDevTools<cr>", { desc = "Flutter DevTools" })
+map("n", "<leader>rb", "<cmd>FlutterOpenDevTools<cr>", { desc = "Flutter DevTools Browser" })
 
 -- Tmux-style tab navigation (prefix Ctrl-b)
 map("n", "<C-b>c", "<cmd>tabnew<CR>", { desc = "tab new" })

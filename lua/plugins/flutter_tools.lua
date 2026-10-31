@@ -87,7 +87,7 @@ return {
 				},
 				dev_tools = {
 					autostart = false,
-					auto_open_browser = false,
+					auto_open_browser = true,
 				},
 				lsp = {
 					cmd = { dart_bin, "language-server", "--protocol=lsp" },

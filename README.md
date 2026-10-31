@@ -93,7 +93,8 @@ The leader key is the **Space bar** (`vim.g.mapleader = " "` in `init.lua`). Any
 | `<leader>ro` | Toggle Flutter outline |
 | `<leader>rL` / `<leader>rc` | Toggle / clear dev log |
 | `<leader>ra` | Attach to running app |
-| `<leader>rt` | Flutter DevTools |
+| `<leader>rt` | Start DevTools server (link is shown as a 10s notification) |
+| `<leader>rb` | Open DevTools in the browser (`FlutterOpenDevTools`; needs the app running so the full VM service link is detected) |
 
   > Emulators launch with `--enable-gpu-libvulkan --gpu host` and `QT_QPA_PLATFORM=xcb`.
 
