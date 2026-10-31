@@ -9,13 +9,32 @@ return {
 		config = function()
 			local nvlsp = require("nvchad.configs.lspconfig")
 
-			local flutter_sdk = vim.fn.expand("~/.cache/flutter_sdk")
-			local flutter_bin = flutter_sdk .. "/bin/flutter"
-			local dart_bin = flutter_sdk .. "/bin/cache/dart-sdk/bin/dart"
+			-- Resolve the Flutter SDK: local checkout first, then $PATH.
+			local tried = {}
 
-			if vim.fn.executable(flutter_bin) ~= 1 or vim.fn.executable(dart_bin) ~= 1 then
+			local function sdk_from_dir(dir)
+				local root = vim.fn.expand(dir)
+				local flutter_bin = root .. "/bin/flutter"
+				local dart_bin = root .. "/bin/cache/dart-sdk/bin/dart"
+				if vim.fn.executable(flutter_bin) == 1 and vim.fn.executable(dart_bin) == 1 then
+					return flutter_bin, dart_bin
+				end
+				table.insert(tried, root)
+			end
+
+			local flutter_bin, dart_bin = sdk_from_dir("~/Projects/flutter/sdk/flutter")
+
+			if not flutter_bin then
+				local path_flutter = vim.fn.exepath("flutter")
+				if path_flutter ~= "" then
+					local root = vim.fn.fnamemodify(path_flutter, ":h:h") -- strip /bin/flutter
+					flutter_bin, dart_bin = sdk_from_dir(root)
+				end
+			end
+
+			if not flutter_bin then
 				vim.notify(
-					"Flutter SDK is unavailable at " .. flutter_sdk .. ". Mount the Dart 3.13 SDK before opening Dart files.",
+					"Flutter SDK not found. Tried: " .. table.concat(tried, ", ") .. " and $PATH.",
 					vim.log.levels.ERROR
 				)
 				return
