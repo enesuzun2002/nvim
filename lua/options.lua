@@ -38,6 +38,7 @@ opt.cursorline = true
 opt.clipboard = "unnamedplus"
 opt.termguicolors = true
 opt.confirm = true
+opt.winborder = "rounded"
 opt.mouse = "a"
 opt.undofile = true
 opt.swapfile = false

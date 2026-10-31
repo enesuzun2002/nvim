@@ -181,4 +181,12 @@ return {
 			require("nvim-ts-autotag").setup()
 		end,
 	},
+	{
+		"nvim-zh/colorful-winsep.nvim",
+		event = { "WinLeave" },
+		opts = {
+			border = "rounded",
+			excluded_ft = { "packer", "TelescopePrompt", "mason", "NvimTree", "snacks_dashboard" },
+		},
+	},
 }
