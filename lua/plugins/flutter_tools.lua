@@ -103,6 +103,66 @@ return {
 				},
 			})
 
+			local commands = require("flutter-tools.commands")
+
+			local map = vim.keymap.set
+
+			-- Profiling & run args -------------------------------------------
+
+			-- Project root from the current buffer's pubspec.yaml, else cwd.
+			local function flutter_root()
+				local buf_path = vim.api.nvim_buf_get_name(0)
+				local search_dir = buf_path ~= "" and vim.fs.dirname(buf_path) or vim.fn.getcwd()
+				local pubspec = vim.fs.find({ "pubspec.yaml" }, { upward = true, path = search_dir })[1]
+				return pubspec and vim.fs.dirname(pubspec) or vim.fn.getcwd()
+			end
+
+			-- dart-define-from-file flag when <project>/dart_defines.release.json exists.
+			local function dart_define_flag()
+				local define_file = flutter_root() .. "/dart_defines.release.json"
+				if vim.uv.fs_stat(define_file) then
+					return "--dart-define-from-file=" .. define_file
+				end
+				return nil
+			end
+
+			local function flutter_run(args)
+				commands.run_command(args)
+			end
+
+			-- Profile-mode build & run (plain, no extra args).
+			map("n", "<leader>rp", function()
+				flutter_run("--profile")
+			end, { desc = "Flutter Profile Run" })
+
+			-- Run with <root>/dart_defines.release.json; mode picked from a menu.
+			map("n", "<leader>rf", function()
+				local define_flag = dart_define_flag()
+				if not define_flag then
+					vim.notify("No dart_defines.release.json in " .. flutter_root(), vim.log.levels.WARN)
+					return
+				end
+				vim.ui.select({ "debug", "profile", "release" }, {
+					prompt = "Run mode with dart_defines.release.json:",
+				}, function(mode)
+					if not mode then
+						return
+					end
+					local args = mode == "debug" and define_flag or ("--" .. mode .. " " .. define_flag)
+					flutter_run(args)
+				end)
+			end, { desc = "Flutter Run With Defines File" })
+
+			-- Run with free-form args, nothing appended automatically.
+			map("n", "<leader>ru", function()
+				vim.ui.input({ prompt = "flutter run args: " }, function(input)
+					if not input or input == "" then
+						return
+					end
+					flutter_run(input)
+				end)
+			end, { desc = "Flutter Run With Args" })
+
 			vim.api.nvim_create_autocmd("BufWritePre", {
 				pattern = "*.dart",
 				callback = function()

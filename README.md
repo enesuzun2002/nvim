@@ -81,6 +81,9 @@ The leader key is the **Space bar** (`vim.g.mapleader = " "` in `init.lua`). Any
 | Key | Description |
 | --- | --- |
 | `<leader>rr` | Flutter Run |
+| `<leader>rp` | **Profile-mode build & run** (plain `flutter run --profile`) |
+| `<leader>rf` | Flutter Run with `<project>/dart_defines.release.json` via `--dart-define-from-file` — a menu picks the mode (debug = plain run, profile, release); warns if the file is missing |
+| `<leader>ru` | Flutter Run with custom args — free-form prompt, nothing appended automatically; values containing spaces are split on whitespace by flutter-tools |
 | `<leader>rd` | Flutter Debug |
 | `<leader>re` | Flutter Emulators |
 | `<leader>rv` | Flutter Devices |
@@ -126,7 +129,7 @@ The leader key is the **Space bar** (`vim.g.mapleader = " "` in `init.lua`). Any
 
 - `Trouble` — diagnostics list (hints filtered out)
 - `Lazy` — plugin manager
-- `FlutterRun`, `FlutterDebug`, `FlutterEmulators`, `FlutterDevices`, `FlutterReload`, `FlutterRestart`, `FlutterQuit`, `FlutterOutlineToggle`, `FlutterLogToggle`, `FlutterLogClear`, `FlutterAttach`, `FlutterDevTools` — flutter-tools user commands used by the mappings above
+- `FlutterRun [args]`, `FlutterDebug [args]`, `FlutterEmulators`, `FlutterDevices`, `FlutterReload`, `FlutterRestart`, `FlutterQuit`, `FlutterOutlineToggle`, `FlutterLogToggle`, `FlutterLogClear`, `FlutterAttach [args]`, `FlutterDevTools` — flutter-tools user commands used by the mappings above; extra CLI args typed after the command are forwarded to `flutter run` (e.g. `:FlutterRun --profile --dart-define-from-file=dart_defines.release.json`)
 
 ## Language support
 
