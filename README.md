@@ -49,7 +49,7 @@ git clone git@github.com:enesuzun2002/nvim.git $env:LOCALAPPDATA\nvim
 
 ## Keybindings
 
-Leader key is `<Space>`. Custom mappings below (`require("nvchad.mappings")` in `lua/mappings.lua` provides the NvChad defaults on top).
+The leader key is the **Space bar** (`vim.g.mapleader = " "` in `init.lua`). Any binding written as `<leader>xx` below means: press `Space`, then `xx` — e.g. `<leader>rr` = `Space` + `r` + `r`. Custom mappings below (`require("nvchad.mappings")` in `lua/mappings.lua` provides the NvChad defaults on top).
 
   > What's *not* here: no DAP debugger keymaps are bound (`debugger = { enabled = false, run_via_dap = false }` in flutter-tools), and most `<leader>r*` / `<leader>c*` / `<leader>k*` keys only do something when the matching SDK or tool is installed and you're in a project of that type.
 
