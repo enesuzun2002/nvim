@@ -118,7 +118,7 @@ return {
 			sections = {
 				{ text = "", padding = 2 },
 				{
-					text = "Welcome Back, Xyrel",
+					text = "Welcome Back, Enes",
 					hl = "SnacksDashboardSpecial",
 					align = "center",
 				},
