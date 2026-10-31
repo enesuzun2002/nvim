@@ -89,7 +89,7 @@ The leader key is the **Space bar** (`vim.g.mapleader = " "` in `init.lua`). Any
 | `<leader>rv` | Flutter Devices |
 | `<leader>rl` | Hot Reload |
 | `<leader>rR` | Hot Restart |
-| `<leader>rq` | Quit Flutter |
+| `<leader>rq` | Quit Flutter — stops the session started from Neovim; if none exists (e.g. app was started before a restart), kills any orphaned `flutter run` process instead |
 | `<leader>ro` | Toggle Flutter outline |
 | `<leader>rL` / `<leader>rc` | Toggle / clear dev log |
 | `<leader>ra` | Attach to running app |

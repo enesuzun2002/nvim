@@ -124,7 +124,29 @@ map("n", "<leader>re", "<cmd>FlutterEmulators<cr>", { desc = "Flutter Emulators"
 map("n", "<leader>rv", "<cmd>FlutterDevices<cr>", { desc = "Flutter Devices" })
 map("n", "<leader>rl", "<cmd>FlutterReload<cr>", { desc = "Hot Reload" })
 map("n", "<leader>rR", "<cmd>FlutterRestart<cr>", { desc = "Hot Restart" })
-map("n", "<leader>rq", "<cmd>FlutterQuit<cr>", { desc = "Quit Flutter" })
+map("n", "<leader>rq", function()
+	local ok, cmds = pcall(require, "flutter-tools.commands")
+	if ok and cmds.is_running() then
+		vim.cmd("FlutterQuit")
+		return
+	end
+
+	-- No session in this Neovim instance (e.g. started before a restart):
+	-- clean up orphaned flutter run processes instead of failing silently.
+	local matched = vim.fn.system("pgrep -f 'flutter_tools%.snapshot run'")
+	local pids = {}
+	for pid in matched:gmatch("%d+") do
+		if tonumber(pid) ~= vim.fn.getpid() then
+			table.insert(pids, pid)
+			os.kill(tonumber(pid), 15) -- SIGTERM
+		end
+	end
+	if #pids > 0 then
+		vim.notify("Killed orphaned flutter run process(es): " .. table.concat(pids, ", "), vim.log.levels.INFO)
+	else
+		vim.notify("No running Flutter session found", vim.log.levels.WARN)
+	end
+end, { desc = "Quit Flutter" })
 map("n", "<leader>ro", "<cmd>FlutterOutlineToggle<cr>", { desc = "Flutter Outline" })
 map("n", "<leader>rL", "<cmd>FlutterLogToggle<cr>", { desc = "Flutter Log" })
 map("n", "<leader>rc", "<cmd>FlutterLogClear<cr>", { desc = "Clear Flutter Log" })
