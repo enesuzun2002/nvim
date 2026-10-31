@@ -122,8 +122,32 @@ map("n", "<leader>rr", "<cmd>FlutterRun<cr>", { desc = "Flutter Run" })
 map("n", "<leader>rd", "<cmd>FlutterDebug<cr>", { desc = "Flutter Debug" })
 map("n", "<leader>re", "<cmd>FlutterEmulators<cr>", { desc = "Flutter Emulators" })
 map("n", "<leader>rv", "<cmd>FlutterDevices<cr>", { desc = "Flutter Devices" })
-map("n", "<leader>rl", "<cmd>FlutterReload<cr>", { desc = "Hot Reload" })
-map("n", "<leader>rR", "<cmd>FlutterRestart<cr>", { desc = "Hot Restart" })
+-- Hot reload/restart need a live flutter-tools session; give a clear hint
+-- instead of the plugin's fleeting "Flutter is not running" line.
+local function flutter_session_live()
+	local ok, cmds = pcall(require, "flutter-tools.commands")
+	if not (ok and cmds and cmds.is_running()) then
+		vim.notify(
+			"No Flutter session running — start one first (<leader>rr, <leader>rp or <leader>rf)",
+			vim.log.levels.WARN
+		)
+		return false
+	end
+	return true
+end
+
+map("n", "<leader>rl", function()
+	if flutter_session_live() then
+		vim.cmd("FlutterReload")
+	end
+end, { desc = "Hot Reload" })
+
+map("n", "<leader>rR", function()
+	if flutter_session_live() then
+		vim.notify("Restarting app...", vim.log.levels.INFO, { timeout = 1500 })
+		vim.cmd("FlutterRestart")
+	end
+end, { desc = "Hot Restart" })
 map("n", "<leader>rq", function()
 	local ok, cmds = pcall(require, "flutter-tools.commands")
 	if ok and cmds.is_running() then
