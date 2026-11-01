@@ -49,7 +49,6 @@ opt.linebreak = true
 opt.spelllang = "en_nz"
 opt.showtabline = 0
 opt.cmdheight = 0
-opt.fillchars:append({ vert = " " })
 
 -- -- Set statusline
 -- opt.laststatus = 0
