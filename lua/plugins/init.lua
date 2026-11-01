@@ -181,16 +181,4 @@ return {
 			require("nvim-ts-autotag").setup()
 		end,
 	},
-	{
-		"nvim-zh/colorful-winsep.nvim",
-		event = { "WinEnter", "BufWinEnter" },
-		opts = {
-			border = "rounded",
-			-- Soft yellow that reads on both nightlamp and kanagawa-dragon
-			highlight = "#e5c890",
-			animate = { enabled = false },
-			indicator_for_2wins = { position = "center" },
-			excluded_ft = { "packer", "TelescopePrompt", "mason", "NvimTree", "snacks_dashboard" },
-		},
-	},
 }
